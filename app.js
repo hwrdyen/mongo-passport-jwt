@@ -8,11 +8,6 @@ const MongoStore = require("connect-mongo");
 var app = express();
 
 const dbString = process.env.mongoDBURL;
-// const dbOptions = {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// };
-// const connection = mongoose.createConnection(dbString, dbOptions);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +25,15 @@ app.use(
 );
 
 app.get("/", (req, res, next) => {
-  res.send("<h1>Hello World</h1>");
+  //   console.log(req.session);
+  if (req.session.viewCount) {
+    req.session.viewCount++;
+  } else {
+    req.session.viewCount = 1;
+  }
+  res.send(
+    `<h1>You have visited this page ${req.session.viewCount} times!</h1>`
+  );
 });
 
 app.listen(8080);
